@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import { firebaseapp } from "../firebase";
+import { firebaseapp } from "../utils/firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { sendPushNotification } from "./InputForm";

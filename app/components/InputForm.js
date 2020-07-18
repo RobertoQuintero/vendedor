@@ -3,7 +3,7 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { StyleSheet, View, TextInput, Button, Platform } from "react-native";
-import { firebaseapp } from "../firebase";
+import { firebaseapp } from "../utils/firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
 const db = firebase.firestore(firebaseapp);

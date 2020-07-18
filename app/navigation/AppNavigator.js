@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as firebase from "firebase";
-import AccountStack from "./AccountStack";
 import HomeStack from "./HomeStack";
+import StartScreen from "./StartScreen";
 
 const AppNavigator = () => {
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const AppNavigator = () => {
   }
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <AccountStack />}
+      {user ? <HomeStack /> : <StartScreen />}
     </NavigationContainer>
   );
 };

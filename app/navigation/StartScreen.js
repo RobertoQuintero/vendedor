@@ -5,7 +5,7 @@ import Register from "../components/Register";
 
 const Stack = createStackNavigator();
 
-const AccountStack = () => {
+const StartScreen = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
@@ -22,4 +22,4 @@ const AccountStack = () => {
   );
 };
 
-export default AccountStack;
+export default StartScreen;
