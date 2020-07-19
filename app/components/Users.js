@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { firebaseapp } from "../utils/firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { sendPushNotification } from "./InputForm";
+import { sendPushNotification } from "../navigation/HomeStack";
 const db = firebase.firestore(firebaseapp);
 
 const Users = () => {
@@ -19,8 +19,9 @@ const Users = () => {
           usersArray.push(user);
         });
         setUsers(usersArray);
+        console.log(users);
       });
-  }, []);
+  }, [setUsers]);
 
   return (
     <View style={{ padding: 10, borderWidth: 1, borderColor: "#ccc" }}>

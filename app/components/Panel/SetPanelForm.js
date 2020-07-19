@@ -23,7 +23,7 @@ const db = firebase.firestore(firebaseapp);
 
 const widthScreen = Dimensions.get("window").width;
 
-const AddRestaurantForm = ({ toastRef, setIsLoading, navigation }) => {
+const SetPanelForm = ({ toastRef, setIsLoading, navigation }) => {
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantAddress, setRestaurantAddress] = useState("");
   const [restaurantDescription, setRestaurantDescription] = useState("");
@@ -206,7 +206,6 @@ function UploadImage({ toastRef, setImageSelected, imageSelected }) {
   };
 
   const removeImage = (image) => {
-    const arrayImages = imageSelected;
     Alert.alert(
       "Eliminar imagen",
       "¿Estas seguro de que quieres eliminar la imagen?",
@@ -350,7 +349,7 @@ function Map(props) {
   );
 }
 
-export default AddRestaurantForm;
+export default SetPanelForm;
 
 const styles = StyleSheet.create({
   scrollView: {

@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { Button, Avatar } from "react-native-elements";
 //
 import { firebaseapp } from "../../utils/firebase";
@@ -11,25 +17,31 @@ import { map } from "lodash";
 
 const ListMeals = (props) => {
   const { navigation, idKitchen, check, token } = props;
-  //
   const [meals, setMeals] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const loadMeals = useCallback(() => {
+    setIsRefreshing(true);
+    const idKitchen = firebase.auth().currentUser.uid;
+    db.collection("meals")
+      .where("idKitchen", "==", idKitchen)
+      .get()
+      .then((response) => {
+        const resultMeal = [];
+        response.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          resultMeal.push(data);
+        });
+        setMeals(resultMeal);
+      });
+    setIsRefreshing(false);
+  }, [setMeals]);
 
   useEffect(() => {
     let isActive = true;
     if (isActive) {
-      const idUser = firebase.auth().currentUser.uid;
-      db.collection("meals")
-        .where("idKitchen", "==", idUser)
-        .get()
-        .then((response) => {
-          const resultMeal = [];
-          response.forEach((doc) => {
-            const data = doc.data();
-            data.id = doc.id;
-            resultMeal.push(data);
-          });
-          setMeals(resultMeal);
-        });
+      loadMeals();
     }
     return () => {
       isActive = false;
@@ -54,9 +66,15 @@ const ListMeals = (props) => {
           })
         }
       />
-      {map(meals, (meal, index) => (
-        <Meal key={index} meal={meal} navigation={navigation} />
-      ))}
+      <View>
+        <FlatList
+          onRefresh={loadMeals}
+          refreshing={isRefreshing}
+          data={meals}
+          keyExtractor={(item) => item.name}
+          renderItem={(itemData) => <Meal meal={itemData.item} />}
+        />
+      </View>
     </View>
   );
 };

@@ -5,10 +5,10 @@ const screenWidth = Dimensions.get("window").width;
 
 const PanelInfo = ({ kitchen }) => {
   return (
-    <ScrollView vertical style={styles.viewBody}>
+    <View vertical style={styles.viewBody}>
       <Carousel arrayImages={kitchen.images} height={250} width={screenWidth} />
       <TitleRestaurant name={kitchen.name} description={kitchen.description} />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -29,7 +29,6 @@ function TitleRestaurant(props) {
 
 const styles = StyleSheet.create({
   viewBody: {
-    flex: 1,
     backgroundColor: "#fff",
   },
   viewRestaurantTitle: {

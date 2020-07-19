@@ -33,6 +33,7 @@ const AddMealForm = ({
     } else {
       setIsLoading(true);
       uploadImageStorage().then((response) => {
+        console.log(response);
         db.collection("meals")
           .add({
             name: mealName,
@@ -54,6 +55,7 @@ const AddMealForm = ({
               "Error al subir el platillo,intentelo mas tarde"
             );
           });
+        setIsLoading(false);
       });
     }
   };
