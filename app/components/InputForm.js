@@ -52,7 +52,11 @@ const InputForm = () => {
         <View>
           <Button
             title="Cerrar Sesión"
-            onPress={() => firebase.auth().signOut()}
+            onPress={() => {
+              AsyncStorage.removeItem("osluToken").then(() =>
+                firebase.auth().signOut()
+              );
+            }}
           />
         </View>
       </View>

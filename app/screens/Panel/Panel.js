@@ -65,7 +65,7 @@ const Panel = ({ navigation }) => {
         setMeals(resultMeal);
         setIsRefreshing(false);
       });
-  }, [setMeals]);
+  }, [setMeals, setIsRefreshing]);
 
   useEffect(() => {
     let isActive = true;

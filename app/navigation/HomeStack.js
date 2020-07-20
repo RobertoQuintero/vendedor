@@ -25,7 +25,9 @@ const HomeStack = () => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      AsyncStorage.setItem("osluToken", token);
+      AsyncStorage.setItem("osluToken", token).then((x) =>
+        console.log("async", x)
+      );
       console.log("token", token);
     });
     Notifications.addNotificationReceivedListener((notification) => {
@@ -91,25 +93,6 @@ function screenOptions(route, color) {
   return (
     <Icon type="material-community" name={iconName} size={22} color={color} />
   );
-}
-
-export async function sendPushNotification(token) {
-  const message = {
-    to: token,
-    sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
-    data: { data: "goes here" },
-  };
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
 }
 
 async function registerForPushNotificationsAsync() {

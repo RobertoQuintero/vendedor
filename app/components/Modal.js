@@ -8,6 +8,7 @@ const Modal = (props) => {
   const closeModal = () => setIsVisible(false);
   return (
     <Overlay
+      useNativeDriver={true}
       isVisible={isVisible}
       windowBackgroundColor="rgba(0,0,0,0.5)"
       overlayBackgroundColor="transparent"
