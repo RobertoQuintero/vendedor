@@ -33,7 +33,7 @@ const Orders = ({ navigation }) => {
     setIsRefreshing(true);
     const idUser = firebase.auth().currentUser.uid;
     db.collection("orders")
-      .where("idRestaurant", "==", idUser)
+      .where("idKitchen", "==", idUser)
       .orderBy("createAt", "desc")
       .limit(limitOrders)
       .get()
@@ -69,7 +69,7 @@ const Orders = ({ navigation }) => {
     orders.length < totalOrders && setIsLoading(true);
     const idUser = firebase.auth().currentUser.uid;
     db.collection("orders")
-      .where("idUser", "==", idUser)
+      .where("idKitchen", "==", idUser)
       .orderBy("createAt", "desc")
       .startAfter(startOrders.data().createAt)
       .limit(limitOrders)

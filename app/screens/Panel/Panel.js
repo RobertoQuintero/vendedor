@@ -17,6 +17,7 @@ import "firebase/firestore";
 const db = firebase.firestore(firebaseapp);
 //
 import PanelInfo from "../../components/Panel/PanelInfo";
+import Card from "../../components/Card";
 
 const Panel = ({ navigation }) => {
   const toastRef = useRef();
@@ -141,25 +142,27 @@ export default Panel;
 function Meal(props) {
   const { name, description, price, images } = props.meal;
   return (
-    <TouchableOpacity>
-      <View style={styles.viewReview}>
-        <View style={styles.viewImageAvatar}>
-          <Avatar
-            size="large"
-            rounded
-            style={styles.imageAvatarUser}
-            source={{ uri: images[0] }}
-          />
-        </View>
-        <View style={styles.viewInfo}>
-          <View style={styles.reviewTitle}>
-            <Text>{name}</Text>
-            <Text>${price}.00</Text>
+    <Card style={styles.mealItem}>
+      <TouchableOpacity>
+        <View style={styles.viewReview}>
+          <View style={styles.viewImageAvatar}>
+            <Avatar
+              size="large"
+              rounded
+              style={styles.imageAvatarUser}
+              source={{ uri: images[0] }}
+            />
           </View>
-          <Text style={styles.reviewText}>{description}</Text>
+          <View style={styles.viewInfo}>
+            <View style={styles.reviewTitle}>
+              <Text>{name}</Text>
+              <Text>${price}.00</Text>
+            </View>
+            <Text style={styles.reviewText}>{description}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Card>
   );
 }
 
@@ -190,10 +193,10 @@ const styles = StyleSheet.create({
   },
   viewReview: {
     flexDirection: "row",
-    margin: 10,
-    paddingBottom: 10,
-    borderBottomColor: "#e3e3e3",
-    borderBottomWidth: 1,
+    // margin: 10,
+    // paddingBottom: 10,
+    // borderBottomColor: "#e3e3e3",
+    // borderBottomWidth: 1,
   },
   viewImageAvatar: {
     marginRight: 15,
@@ -214,5 +217,10 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     color: "grey",
     marginBottom: 5,
+  },
+  mealItem: {
+    marginHorizontal: 10,
+    marginVertical: 5,
+    padding: 10,
   },
 });

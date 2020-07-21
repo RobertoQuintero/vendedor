@@ -9,6 +9,7 @@ import {
 import { Image, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Card from "../Card";
 
 const OrdersList = ({
   orders,
@@ -19,7 +20,7 @@ const OrdersList = ({
   loadOrders,
   isRefreshing,
 }) => {
-  console.log(orders);
+  // console.log(orders);
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1 }}>
@@ -75,103 +76,105 @@ function Order({ order, navigation }) {
   const createOrder = new Date(createAt.seconds * 1000);
   const deliveredTime = new Date(deliveredHour?.seconds * 1000);
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("order", { id: id });
-      }}
-    >
-      <View style={styles.viewInfo}>
-        <View style={styles.viewKitchen}>
-          <View style={styles.imageKitchen}>
-            <Image
-              resizeMode="cover"
-              PlaceholderContent={<ActivityIndicator color="#fff" />}
-              source={
-                image
-                  ? { uri: image }
-                  : require("../../../assets/img/no-image.png")
-              }
-              style={styles.imageSource}
-            />
-          </View>
-          {!delivered ? (
-            <View style={styles.buttons}>
-              {!received ? (
-                !cancelled ? (
-                  <View style={styles.accept}>
-                    <Button
-                      title="Aceptar"
-                      containerStyle={styles.acceptContainerBtn}
-                    />
-                    <Button
-                      title="Rechazar"
-                      containerStyle={styles.acceptContainerBtn}
-                      buttonStyle={styles.acceptBtnRight}
-                    />
-                  </View>
-                ) : (
-                  <View style={styles.accept}>
-                    <Button
-                      title="No disponible"
-                      containerStyle={styles.deliveredBtn}
-                      buttonStyle={styles.acceptBtnRight}
-                    />
-                  </View>
-                )
-              ) : (
-                <>
-                  {!sended ? (
+    <Card style={styles.orderItem}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("order", { id: id });
+        }}
+      >
+        <View style={styles.viewInfo}>
+          <View style={styles.viewKitchen}>
+            <View style={styles.imageKitchen}>
+              <Image
+                resizeMode="cover"
+                PlaceholderContent={<ActivityIndicator color="#fff" />}
+                source={
+                  image
+                    ? { uri: image }
+                    : require("../../../assets/img/no-image.png")
+                }
+                style={styles.imageSource}
+              />
+            </View>
+            {!delivered ? (
+              <View style={styles.buttons}>
+                {!received ? (
+                  !cancelled ? (
                     <View style={styles.accept}>
                       <Button
-                        title="Enviar"
+                        title="Aceptar"
                         containerStyle={styles.acceptContainerBtn}
                       />
                       <Button
-                        title="Ubicación"
+                        title="Rechazar"
                         containerStyle={styles.acceptContainerBtn}
+                        buttonStyle={styles.acceptBtnRight}
                       />
                     </View>
                   ) : (
-                    <View style={styles.deliveredContainer}>
+                    <View style={styles.accept}>
                       <Button
-                        title="Ubicación"
+                        title="No disponible"
                         containerStyle={styles.deliveredBtn}
-                      />
-                      <Button
-                        title="Entregado"
-                        containerStyle={styles.deliveredBtn}
+                        buttonStyle={styles.acceptBtnRight}
                       />
                     </View>
-                  )}
-                </>
-              )}
-            </View>
-          ) : (
-            <View style={styles.deliveredState}>
-              <Text>Entregado</Text>
-              <Text>
-                {deliveredTime.getDate()}/{deliveredTime.getMonth() + 1}/
-                {deliveredTime.getFullYear()} - {deliveredTime.getHours()}:
-                {deliveredTime.getMinutes() < 10 ? "0" : ""}
-                {deliveredTime.getMinutes()}
-              </Text>
-            </View>
-          )}
-        </View>
-        <Text style={styles.reviewTitle}>
-          {name} - {quantity}
-        </Text>
-        <Text style={styles.reviewText}>${total}.00</Text>
-        {
-          <Text style={styles.reviewDate}>
-            {createOrder.getDate()}/{createOrder.getMonth() + 1}/
-            {createOrder.getFullYear()} - {createOrder.getHours()}:
-            {createOrder.getMinutes() < 10 ? "0" : ""}
-            {createOrder.getMinutes()}
+                  )
+                ) : (
+                  <>
+                    {!sended ? (
+                      <View style={styles.accept}>
+                        <Button
+                          title="Enviar"
+                          containerStyle={styles.acceptContainerBtn}
+                        />
+                        <Button
+                          title="Ubicación"
+                          containerStyle={styles.acceptContainerBtn}
+                        />
+                      </View>
+                    ) : (
+                      <View style={styles.accept}>
+                        <Button
+                          title="Ubicación"
+                          containerStyle={styles.acceptContainerBtn}
+                        />
+                        <Button
+                          title="Entregado"
+                          containerStyle={styles.acceptContainerBtn}
+                        />
+                      </View>
+                    )}
+                  </>
+                )}
+              </View>
+            ) : (
+              <View style={styles.deliveredState}>
+                <Text>Entregado</Text>
+                <Text>
+                  {deliveredTime.getDate()}/{deliveredTime.getMonth() + 1}/
+                  {deliveredTime.getFullYear()} - {deliveredTime.getHours()}:
+                  {deliveredTime.getMinutes() < 10 ? "0" : ""}
+                  {deliveredTime.getMinutes()}
+                </Text>
+              </View>
+            )}
+          </View>
+          <Text style={styles.reviewTitle}>
+            {name} - {quantity}
           </Text>
-        }
-      </View>
-    </TouchableOpacity>
+          <Text style={styles.reviewText}>${total}.00</Text>
+          {
+            <Text style={styles.reviewDate}>
+              {createOrder.getDate()}/{createOrder.getMonth() + 1}/
+              {createOrder.getFullYear()} - {createOrder.getHours()}:
+              {createOrder.getMinutes() < 10 ? "0" : ""}
+              {createOrder.getMinutes()}
+            </Text>
+          }
+        </View>
+      </TouchableOpacity>
+    </Card>
   );
 }
 function FooterList(props) {
@@ -194,19 +197,19 @@ function FooterList(props) {
 
 const styles = StyleSheet.create({
   viewInfo: {
-    borderWidth: 1,
-    borderColor: "#eee",
-    padding: 5,
-    marginBottom: 5,
+    // borderWidth: 1,
+    // borderColor: "#eee",
+    // padding: 5,
+    // marginBottom: 5,
   },
   reviewTitle: {
     fontWeight: "bold",
-    marginTop: 5,
+    // marginTop: 5,
   },
   reviewText: {
-    paddingTop: 2,
+    // paddingTop: 2,
     color: "grey",
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   reviewDate: {
     color: "grey",
@@ -218,24 +221,24 @@ const styles = StyleSheet.create({
   viewKitchen: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: 115,
+    height: 100,
   },
   imageKitchen: {
-    width: "35%",
-    height: 115,
+    width: "32%",
+    height: 90,
   },
   imageSource: {
     width: "100%",
     height: "100%",
   },
   buttons: {
-    width: "63%",
+    width: "67%",
     justifyContent: "center",
   },
   accept: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: "2%",
+    // marginBottom: "2%",
   },
   acceptContainerBtn: {
     width: "48%",
@@ -257,5 +260,9 @@ const styles = StyleSheet.create({
   },
   notFoundOrders: {
     alignItems: "center",
+  },
+  orderItem: {
+    margin: 5,
+    padding: 10,
   },
 });

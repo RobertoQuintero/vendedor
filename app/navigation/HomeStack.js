@@ -26,7 +26,7 @@ const HomeStack = () => {
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       AsyncStorage.setItem("osluToken", token).then((x) =>
-        console.log("async", x)
+        console.log("async", token)
       );
       console.log("token", token);
     });

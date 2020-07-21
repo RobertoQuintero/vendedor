@@ -187,6 +187,9 @@ const Order = ({ navigation, route }) => {
                   <Button
                     title="Ubicación"
                     containerStyle={styles.acceptContainerBtn}
+                    onPress={() => {
+                      setIsVisibleMap(true);
+                    }}
                   />
                   <Button
                     title="Entregado"
