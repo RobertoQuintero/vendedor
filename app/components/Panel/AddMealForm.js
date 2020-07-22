@@ -33,7 +33,6 @@ const AddMealForm = ({
     } else {
       setIsLoading(true);
       uploadImageStorage().then((response) => {
-        console.log(response);
         db.collection("meals")
           .add({
             name: mealName,
@@ -43,6 +42,7 @@ const AddMealForm = ({
             createAt: new Date(),
             idKitchen: idKitchen,
             token: token,
+            available: true,
           })
           .then(() => {
             // console.log("0k");

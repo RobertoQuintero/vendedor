@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Icon, Button, Avatar } from "react-native-elements";
@@ -27,22 +28,26 @@ const Panel = ({ navigation }) => {
   const [meals, setMeals] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const loadKitchen = useCallback(() => {
+    const idUser = firebase.auth().currentUser.uid;
+    db.collection("kitchens")
+      .doc(idUser)
+      .get()
+      .then((response) => {
+        setKitchen(response.data());
+        setLoading(false);
+      })
+      .catch((err) => {
+        toastRef.current.show("Error al cargar Información");
+        setLoading(false);
+      });
+  }, [setKitchen, setLoading]);
+
   useFocusEffect(
     useCallback(() => {
       let isAuth = true;
       if (isAuth) {
-        const idUser = firebase.auth().currentUser.uid;
-        db.collection("kitchens")
-          .doc(idUser)
-          .get()
-          .then((response) => {
-            setKitchen(response.data());
-            setLoading(false);
-          })
-          .catch((err) => {
-            toastRef.current.show("Error al cargar Información");
-            setLoading(false);
-          });
+        loadKitchen();
       }
       return () => {
         isAuth = false;
@@ -85,6 +90,15 @@ const Panel = ({ navigation }) => {
       </View>
     );
   }
+  const openHandler = () => {
+    const idKitchen = firebase.auth().currentUser.uid;
+    db.collection("kitchens")
+      .doc(idKitchen)
+      .update({ open: !kitchen.open })
+      .then(() => {
+        loadKitchen();
+      });
+  };
 
   return (
     <>
@@ -96,7 +110,7 @@ const Panel = ({ navigation }) => {
             style={{ backgroundColor: "white" }}
             ListHeaderComponent={
               <>
-                <PanelInfo kitchen={kitchen} />
+                <PanelInfo kitchen={kitchen} openHandler={openHandler} />
                 <Button
                   title="Agrega un platillo"
                   buttonStyle={styles.btnAddReview}
@@ -117,9 +131,10 @@ const Panel = ({ navigation }) => {
             }
             data={meals}
             keyExtractor={(item) => item.name}
-            renderItem={(itemData) => <Meal meal={itemData.item} />}
+            renderItem={(itemData) => (
+              <Meal meal={itemData.item} loadMeals={loadMeals} />
+            )}
           />
-          <Toast ref={toastRef} position="center" opacity={0.9} />
         </>
       ) : (
         <View style={styles.viewIcon}>
@@ -133,17 +148,48 @@ const Panel = ({ navigation }) => {
           />
         </View>
       )}
+      <Toast ref={toastRef} position="center" opacity={0.9} />
     </>
   );
 };
 
 export default Panel;
 
+const availableHandler = (id, available, loadMeals) => {
+  let mealState = "";
+  available ? (mealState = "Disponible") : (mealState = "No disponible");
+  Alert.alert(
+    `Platillo ${mealState}`,
+    "¿Estas seguro de que quieres cambiar la disponibilidad del platillo?",
+    [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Cambiar",
+        onPress: () => {
+          db.collection("meals")
+            .doc(id)
+            .update({ available: !available })
+            .then(() => {
+              loadMeals();
+            });
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
+
 function Meal(props) {
-  const { name, description, price, images } = props.meal;
+  const { loadMeals } = props;
+  const { name, description, price, images, id, available } = props.meal;
   return (
     <Card style={styles.mealItem}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => availableHandler(id, available, loadMeals)}
+      >
         <View style={styles.viewReview}>
           <View style={styles.viewImageAvatar}>
             <Avatar
@@ -154,11 +200,25 @@ function Meal(props) {
             />
           </View>
           <View style={styles.viewInfo}>
-            <View style={styles.reviewTitle}>
-              <Text>{name}</Text>
-              <Text>${price}.00</Text>
-            </View>
-            <Text style={styles.reviewText}>{description}</Text>
+            {available ? (
+              <>
+                <View style={styles.reviewTitle}>
+                  <Text>{name}</Text>
+                  <Text>${price}.00</Text>
+                </View>
+                <Text style={styles.reviewText}>{description}</Text>
+              </>
+            ) : (
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flex: 1,
+                }}
+              >
+                <Text style={{ fontSize: 18 }}>No disponible</Text>
+              </View>
+            )}
           </View>
         </View>
       </TouchableOpacity>

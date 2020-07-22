@@ -43,7 +43,7 @@ const SetPanelForm = ({ toastRef, setIsLoading, navigation }) => {
     return () => (isAuth = false);
   }, []);
   useEffect(() => {
-    AsyncStorage.getItem("token").then((x) => {
+    AsyncStorage.getItem("osluToken").then((x) => {
       console.log("token", x);
       setExpoToken(x);
     });
@@ -67,12 +67,10 @@ const SetPanelForm = ({ toastRef, setIsLoading, navigation }) => {
             description: restaurantDescription,
             location: locationRestaurant,
             images: response,
-            rating: 0,
-            ratingTotal: 0,
-            quaantityVoting: 0,
             createAt: new Date(),
             token: expoToken,
             uid: userUid,
+            open: true,
           })
           .then(() => {
             // console.log("0k");
@@ -308,7 +306,7 @@ function Map(props) {
 
   const confirmLocation = () => {
     setLocationRestaurant(location);
-    toastRef.current.show("Localización guardada correctamente");
+    // toastRef.current.show("Localización guardada correctamente");
     setIsVisibleMap(false);
   };
   return (

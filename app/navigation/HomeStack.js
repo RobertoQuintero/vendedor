@@ -25,10 +25,10 @@ const HomeStack = () => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      AsyncStorage.setItem("osluToken", token).then((x) =>
-        console.log("async", token)
-      );
-      console.log("token", token);
+      AsyncStorage.setItem("osluToken", token).then((x) => {
+        // console.log("async", token)
+      });
+      // console.log("token", token);
     });
     Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
