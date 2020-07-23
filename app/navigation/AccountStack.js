@@ -1,14 +1,17 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import UserLogged from "../screens/Account/UserLogged";
 
-const AccountStack = () => {
+const Stack = createStackNavigator();
+
+export default AccountStack = () => {
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="account"
+        component={UserLogged}
+        options={{ title: "Cuenta" }}
+      />
+    </Stack.Navigator>
   );
 };
-
-export default AccountStack;
-
-const styles = StyleSheet.create({});

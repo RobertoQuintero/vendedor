@@ -5,9 +5,9 @@ import * as Permissions from "expo-permissions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import { AsyncStorage, Platform } from "react-native";
-import Home from "../components/Home";
 import OrdersStack from "./OrdersStack";
 import PanelStack from "./PanelStack";
+import AccountStack from "./AccountStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +64,7 @@ const HomeStack = () => {
       />
       <Tab.Screen
         name="account"
-        component={Home}
+        component={AccountStack}
         options={{ title: "Cuenta" }}
       />
     </Tab.Navigator>
