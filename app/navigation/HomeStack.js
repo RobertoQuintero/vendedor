@@ -9,6 +9,11 @@ import OrdersStack from "./OrdersStack";
 import PanelStack from "./PanelStack";
 import AccountStack from "./AccountStack";
 
+import { firebaseapp } from "../utils/firebase";
+import firebase from "firebase";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseapp);
+
 const Tab = createBottomTabNavigator();
 
 Notifications.setNotificationHandler({
@@ -26,7 +31,11 @@ const HomeStack = () => {
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       AsyncStorage.setItem("osluToken", token).then((x) => {
-        // console.log("async", token)
+        console.log(token);
+        const UID = firebase.auth().currentUser.uid;
+        db.collection("kitchens").doc(UID).update({
+          token: token,
+        });
       });
       // console.log("token", token);
     });

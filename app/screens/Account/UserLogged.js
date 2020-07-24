@@ -2,7 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, View, AsyncStorage } from "react-native";
 import { Button } from "react-native-elements";
 import Toast from "react-native-easy-toast";
-import * as firebase from "firebase";
+import * as Firebase from "firebase";
+import firebase from "firebase";
+import { firebaseapp } from "../../utils/firebase";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseapp);
+
 import Loading from "../../components/Loading";
 import InfoUser from "../../components/Account/InfoUser";
 import AccountOptions from "../../components/Account/AccountOptions";
@@ -12,6 +17,7 @@ const UserLogged = () => {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [reloadUserInfo, setReloadUserInfo] = useState(false);
+  const [mealsId, setMealsId] = useState(null);
   const toastRef = useRef();
 
   useEffect(() => {
@@ -21,6 +27,24 @@ const UserLogged = () => {
     })();
     setReloadUserInfo(false);
   }, [reloadUserInfo]);
+
+  useEffect(() => {
+    let isAuth = true;
+    if (isAuth) {
+      const idKitchen = firebase.auth().currentUser.uid;
+      db.collection("meals")
+        .where("idKitchen", "==", idKitchen)
+        .get()
+        .then((response) => {
+          const arrayId = [];
+          response.forEach((doc) => {
+            arrayId.push(doc.id);
+          });
+          setMealsId(arrayId);
+        });
+    }
+    return () => (isAuth = false);
+  }, []);
   return (
     <View style={styles.viewUserInfo}>
       {userInfo && (
@@ -43,6 +67,21 @@ const UserLogged = () => {
         onPress={() => {
           AsyncStorage.removeItem("osluToken").then(() => {
             firebase.auth().signOut();
+          });
+        }}
+      />
+      <Button
+        title="Actualizar Token"
+        buttonStyle={styles.btnCloseSession}
+        titleStyle={styles.btnCloseSessionText}
+        onPress={() => {
+          AsyncStorage.getItem("osluToken").then((x) => {
+            mealsId.forEach((docId) => {
+              db.collection("meals")
+                .doc(docId)
+                .update({ token: x })
+                .then(() => console.log("ok"));
+            });
           });
         }}
       />

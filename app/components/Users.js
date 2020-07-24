@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { firebaseapp } from "../utils/firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { sendPushNotification } from "../utils/ordersRequest";
 const db = firebase.firestore(firebaseapp);
+import { sendPushNotification } from "../utils/ordersRequest";
 
 const Users = () => {
   const [users, setUsers] = useState();
